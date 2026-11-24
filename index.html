@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LUMINANZE — Unified Creator & IP Telemetry</title>
-  
-  <!-- Tailwind CSS -->
+  <title>LUMIZ — Unified Analytics & Telemetry</title>
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Supabase JS SDK v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
-  <!-- Google Fonts: Editorial Sans & Technical Mono -->
+
+  <!-- Google Fonts: Inter (UI), Montserrat Black (LUMIZ Display Identity), JetBrains Mono (Telemetry Numbers) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -23,236 +23,248 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['"Inter"', 'sans-serif'],
+            display: ['"Montserrat"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            obsidian: '#09090B',
-            charcoal: '#121215',
-            paper: '#FAFAFA',
-            crimson: '#E11D48',
-            gold: '#D97706',
-            electric: '#7C3AED',
+            lumizBg: '#070709',
+            lumizSurface: '#101014',
+            lumizCard: '#141419',
+            lumizPurple: '#9333EA',
+            lumizPurpleLight: '#A855F7',
+            lumizCrimson: '#E11D48',
+            lumizGold: '#F59E0B',
+          },
+          boxShadow: {
+            'purple-glow': '0 0 20px rgba(147, 51, 234, 0.45)',
+            'purple-subtle': '0 0 35px rgba(147, 51, 234, 0.15)',
           }
         }
       }
-    }
+    };
   </script>
 
   <style>
     body {
-      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      background-color: #070709;
+      color: #F4F4F5;
+      overflow-x: hidden;
     }
-    /* Custom scrollbar minimalis */
+
+    /* Subtle radial ambient glow matching LUMIZ dark editorial aesthetic */
+    .lumiz-hero-glow {
+      background: radial-gradient(circle at 50% 0%, rgba(147, 51, 234, 0.12) 0%, rgba(7, 7, 9, 0) 65%);
+    }
+
+    /* Custom sleek scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #3f3f46; }
+    ::-webkit-scrollbar-track { background: #070709; }
+    ::-webkit-scrollbar-thumb { background: #27272A; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9333EA; }
   </style>
 </head>
-<body class="bg-paper text-zinc-900 dark:bg-obsidian dark:text-zinc-100 antialiased selection:bg-crimson selection:text-white transition-colors duration-200">
+<body class="bg-lumizBg text-zinc-100 antialiased selection:bg-lumizPurple selection:text-white min-h-screen flex flex-col">
 
-  <!-- TOP EDITORIAL HEADER -->
-  <header class="border-b border-zinc-200 dark:border-zinc-800 sticky top-0 z-30 bg-paper/90 dark:bg-obsidian/90 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-2.5">
-          <span class="w-3 h-3 bg-crimson inline-block"></span>
-          <span class="font-bold tracking-tight text-lg uppercase">Luminanze</span>
-        </div>
-        <span class="hidden sm:inline-block text-zinc-300 dark:text-zinc-700">|</span>
-        <span class="hidden sm:inline-block font-mono text-xs uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-          Unified Agency Telemetry v1.0
-        </span>
+  <!-- =========================================================================
+       TOP NAVIGATION BAR (LUMIZ STANDARD)
+       ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-lumizBg/90 backdrop-blur-md border-b border-white/[0.06]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+
+      <!-- Left: LUMIZ Brand Logo & Navigation Links -->
+      <div class="flex items-center gap-8">
+        <a href="#overview" class="font-display font-black text-xl sm:text-2xl tracking-tighter flex items-center select-none">
+          <span class="text-white">LUMI</span><span class="text-lumizPurpleLight drop-shadow-[0_0_10px_rgba(168,85,247,0.6)]">Z</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+          <a href="#overview" class="nav-link text-white pb-1 border-b-2 border-lumizPurpleLight transition-colors">Overview</a>
+          <a href="#velocity" class="nav-link text-zinc-400 hover:text-white pb-1 border-b-2 border-transparent transition-colors">Analytics</a>
+          <a href="#channels" class="nav-link text-zinc-400 hover:text-white pb-1 border-b-2 border-transparent transition-colors">Channels</a>
+          <a href="#qc-gate" class="nav-link text-zinc-400 hover:text-white pb-1 border-b-2 border-transparent transition-colors">QC Gate</a>
+        </nav>
       </div>
 
+      <!-- Right: Action Button -->
       <div class="flex items-center gap-3">
-        <!-- Connection Status Badge -->
-        <div id="db-status" class="flex items-center gap-2 px-2.5 py-1 border border-zinc-300 dark:border-zinc-800 font-mono text-[11px]">
-          <span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
-          <span>SIMULATION MODE</span>
-        </div>
-
-        <!-- Theme Toggle -->
-        <button id="theme-toggle" class="px-3 py-1.5 border border-zinc-300 dark:border-zinc-800 hover:border-zinc-900 dark:hover:border-zinc-100 font-mono text-xs uppercase transition-colors">
-          Light / Dark
-        </button>
-
-        <!-- Add Account Button -->
-        <button onclick="toggleModal(true)" class="px-3.5 py-1.5 bg-zinc-900 text-white dark:bg-white dark:text-obsidian font-mono text-xs font-semibold uppercase tracking-wider hover:bg-crimson dark:hover:bg-crimson dark:hover:text-white transition-colors">
-          + Track Channel
+        <button onclick="toggleModal(true)" class="px-5 py-2 rounded-lg bg-lumizPurple hover:bg-lumizPurpleLight text-white font-bold text-xs tracking-wider uppercase shadow-purple-glow transition-all active:scale-95">
+          + TRACK
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+  <!-- =========================================================================
+       HEADER SECTION (DIRECT TO ANALYTICS OVERVIEW)
+       ========================================================================= -->
+  <section id="overview" class="lumiz-hero-glow pt-10 pb-8 px-4 sm:px-6 lg:px-8 border-b border-white/[0.05]">
+    <div class="max-w-4xl mx-auto text-center space-y-5">
+      <h1 class="font-display font-black text-2xl sm:text-3xl tracking-tight uppercase text-white">
+        ANALYTICS OVERVIEW
+      </h1>
 
-    <!-- SUB-HEADER & PLATFORM FILTER BAR -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-zinc-200 dark:border-zinc-800">
-      <div>
-        <p class="font-mono text-xs uppercase tracking-widest text-crimson mb-1">Hulu — Traffic Engine — Hilir</p>
-        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Creator & IP Performance Matrix</h1>
-      </div>
-
-      <!-- Platform Filter Tabs -->
-      <div class="inline-flex border border-zinc-300 dark:border-zinc-800 divide-x divide-zinc-300 dark:divide-zinc-800 font-mono text-xs">
-        <button onclick="setPlatformFilter('all')" data-filter="all" class="filter-btn px-4 py-2 bg-zinc-900 text-white dark:bg-white dark:text-obsidian font-semibold">
-          ALL CHANNELS
+      <!-- Rounded Pill Filter Bar -->
+      <div class="flex flex-wrap items-center justify-center gap-2.5">
+        <button onclick="setPlatformFilter('all')" data-filter="all" class="filter-pill px-5 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all bg-lumizPurple text-white shadow-purple-glow border border-lumizPurpleLight">
+          All
         </button>
-        <button onclick="setPlatformFilter('youtube')" data-filter="youtube" class="filter-btn px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
-          YT SHORTS
+        <button onclick="setPlatformFilter('youtube')" data-filter="youtube" class="filter-pill px-5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all bg-lumizSurface text-zinc-300 border border-white/10 hover:border-white/25 hover:text-white">
+          YouTube Shorts
         </button>
-        <button onclick="setPlatformFilter('tiktok')" data-filter="tiktok" class="filter-btn px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
-          TIKTOK
+        <button onclick="setPlatformFilter('tiktok')" data-filter="tiktok" class="filter-pill px-5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all bg-lumizSurface text-zinc-300 border border-white/10 hover:border-white/25 hover:text-white">
+          TikTok
         </button>
-        <button onclick="setPlatformFilter('instagram')" data-filter="instagram" class="filter-btn px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
-          IG REELS
+        <button onclick="setPlatformFilter('instagram')" data-filter="instagram" class="filter-pill px-5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all bg-lumizSurface text-zinc-300 border border-white/10 hover:border-white/25 hover:text-white">
+          Instagram Reels
         </button>
       </div>
     </div>
+  </section>
 
-    <!-- KPI GRID (4 SHARP EDITORIAL CARDS) -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border border-zinc-200 dark:border-zinc-800 divide-y sm:divide-y-0 sm:divide-x divide-zinc-200 dark:divide-zinc-800">
-      <!-- KPI 1 -->
-      <div class="p-6 bg-white dark:bg-charcoal/50">
+  <!-- =========================================================================
+       MAIN ANALYTICS CONTENT
+       ========================================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+
+    <!-- 1. KPI METRIC CARDS (4-COLUMN GRID) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+
+      <!-- KPI 1: Total Cross-Views -->
+      <div class="rounded-2xl bg-lumizSurface border border-white/[0.08] p-6 hover:border-lumizPurple/50 transition-colors">
         <div class="flex items-center justify-between mb-3">
-          <span class="font-mono text-xs uppercase tracking-wider text-zinc-500">Total Cross-Views</span>
-          <span class="font-mono text-xs text-emerald-500">+24.8%</span>
+          <span class="text-xs font-medium uppercase tracking-wider text-zinc-400">Total Cross-Views</span>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-[11px] font-semibold">ORGANIC</span>
         </div>
-        <div id="kpi-views" class="text-3xl font-bold font-mono tracking-tight">1,482,900</div>
-        <p class="text-xs text-zinc-500 mt-2">Akumulasi organik 30 hari terakhir</p>
+        <div id="kpi-views" class="font-mono text-3xl font-bold text-white tracking-tight">0</div>
+        <p class="text-xs text-zinc-500 mt-2">Akumulasi tayang seluruh kanal aktif</p>
       </div>
 
-      <!-- KPI 2 -->
-      <div class="p-6 bg-white dark:bg-charcoal/50">
+      <!-- KPI 2: Total Audience -->
+      <div class="rounded-2xl bg-lumizSurface border border-white/[0.08] p-6 hover:border-lumizPurple/50 transition-colors">
         <div class="flex items-center justify-between mb-3">
-          <span class="font-mono text-xs uppercase tracking-wider text-zinc-500">Total Audience</span>
-          <span class="font-mono text-xs text-electric">TIER-1 62%</span>
+          <span class="text-xs font-medium uppercase tracking-wider text-zinc-400">Total Audience</span>
+          <span class="px-2 py-0.5 rounded-full bg-lumizPurple/15 text-lumizPurpleLight font-mono text-[11px] font-semibold">TIER-1 &amp; ID</span>
         </div>
-        <div id="kpi-followers" class="text-3xl font-bold font-mono tracking-tight">84,320</div>
-        <p class="text-xs text-zinc-500 mt-2">Subscribers & followers lintas IP</p>
+        <div id="kpi-followers" class="font-mono text-3xl font-bold text-white tracking-tight">0</div>
+        <p class="text-xs text-zinc-500 mt-2">Subscribers &amp; followers lintas IP</p>
       </div>
 
-      <!-- KPI 3 -->
-      <div class="p-6 bg-white dark:bg-charcoal/50">
+      <!-- KPI 3: Est. AdSense / Creator Pool -->
+      <div class="rounded-2xl bg-lumizSurface border border-white/[0.08] p-6 hover:border-lumizPurple/50 transition-colors">
         <div class="flex items-center justify-between mb-3">
-          <span class="font-mono text-xs uppercase tracking-wider text-zinc-500">Est. AdSense / Pool</span>
-          <span class="font-mono text-xs text-gold">USD</span>
+          <span class="text-xs font-medium uppercase tracking-wider text-zinc-400">Est. AdSense / Pool</span>
+          <span class="px-2 py-0.5 rounded-full bg-lumizGold/15 text-lumizGold font-mono text-[11px] font-semibold">USD</span>
         </div>
-        <div id="kpi-adsense" class="text-3xl font-bold font-mono tracking-tight">$642.50</div>
-        <p class="text-xs text-zinc-500 mt-2">Estimasi RPM campuran YT & TikTok</p>
+        <div id="kpi-adsense" class="font-mono text-3xl font-bold text-white tracking-tight">$0.00</div>
+        <p class="text-xs text-zinc-500 mt-2">Estimasi monetisasi trafik hulu</p>
       </div>
 
-      <!-- KPI 4 -->
-      <div class="p-6 bg-white dark:bg-charcoal/50 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-1.5 h-full bg-crimson"></div>
+      <!-- KPI 4: Lumiz Pro Funnel (Rp3.000 / $0.50) -->
+      <div class="rounded-2xl bg-lumizSurface border border-lumizPurple/40 p-6 shadow-purple-subtle relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-lumizPurple/10 rounded-full blur-2xl -mr-8 -mt-8 pointer-events-none"></div>
         <div class="flex items-center justify-between mb-3">
-          <span class="font-mono text-xs uppercase tracking-wider text-crimson font-semibold">Lumiz Pro Funnel</span>
-          <span class="font-mono text-xs text-zinc-400">Rp3k / $0.50</span>
+          <span class="text-xs font-semibold uppercase tracking-wider text-lumizPurpleLight">Lumiz Pro Funnel</span>
+          <span class="px-2 py-0.5 rounded-full bg-lumizPurple/20 text-white font-mono text-[11px]">Rp3K / $0.50</span>
         </div>
-        <div id="kpi-funnel" class="text-3xl font-bold font-mono tracking-tight">1,940 <span class="text-sm font-normal text-zinc-500">unlocks</span></div>
-        <p class="text-xs text-zinc-500 mt-2">Konversi langsung dari bio & pinned comment</p>
+        <div id="kpi-funnel" class="font-mono text-3xl font-bold text-white tracking-tight">0</div>
+        <p class="text-xs text-zinc-400 mt-2">Klik konversi menuju katalog Lumiz</p>
       </div>
+
     </section>
 
-    <!-- MAIN ANALYTICS CHART + QC & PIPELINE STATUS -->
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-      <!-- Growth Chart (2 Columns) -->
-      <div class="lg:col-span-2 border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-charcoal/30">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+    <!-- 2. VELOCITY CHART & LUMIZTUDIO QC GATE -->
+    <section id="velocity" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- 7-Day Velocity Chart (2 Cols) -->
+      <div class="lg:col-span-2 rounded-2xl bg-lumizSurface border border-white/[0.08] p-6 flex flex-col">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
-            <h2 class="text-base font-bold uppercase tracking-wide">7-Day Velocity Trajectory</h2>
-            <p class="text-xs text-zinc-500">Perbandingan penayangan harian per platform distribusi</p>
+            <h3 class="font-display font-extrabold text-base tracking-wide uppercase text-white">7-Day Velocity Trajectory</h3>
+            <p class="text-xs text-zinc-400 mt-0.5">Pertumbuhan penayangan harian (views_24h) lintas platform</p>
           </div>
-          <div class="flex items-center gap-4 font-mono text-[11px]">
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-crimson inline-block"></span> YouTube</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-electric inline-block"></span> TikTok</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-gold inline-block"></span> Instagram</span>
+          <div class="flex flex-wrap items-center gap-4 font-mono text-[11px] text-zinc-300">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-lumizCrimson inline-block"></span> YouTube</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-lumizPurpleLight inline-block"></span> TikTok</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-lumizGold inline-block"></span> Instagram</span>
           </div>
         </div>
-        <div class="h-72 w-full">
+        <div class="relative flex-1 min-h-[280px] w-full">
           <canvas id="velocityChart"></canvas>
+          <div id="chart-empty" class="hidden absolute inset-0 flex flex-col items-center justify-center text-center bg-lumizSurface/90 rounded-xl p-4">
+            <p class="font-mono text-xs text-zinc-400">Belum ada data snapshot harian di Supabase.</p>
+            <p class="text-[11px] text-zinc-500 mt-1">Tambahkan link kanal lalu jalankan Sync atau Update Data untuk membentuk grafik asli.</p>
+          </div>
         </div>
       </div>
 
-      <!-- Agency QC Queue (1 Column) -->
-      <div class="border border-zinc-200 dark:border-zinc-800 p-6 bg-white dark:bg-charcoal/30 flex flex-col justify-between">
+      <!-- Lumiztudio QC Gate (1 Col) -->
+      <div id="qc-gate" class="rounded-2xl bg-lumizSurface border border-white/[0.08] p-6 flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between pb-4 mb-4 border-b border-zinc-200 dark:border-zinc-800">
-            <h2 class="text-base font-bold uppercase tracking-wide">Lumiztudio QC Gate</h2>
-            <span class="font-mono text-[11px] px-2 py-0.5 border border-gold text-gold">VEVO STANDARD</span>
+          <div class="flex items-center justify-between pb-4 mb-5 border-b border-white/[0.08]">
+            <div>
+              <h3 class="font-display font-extrabold text-base tracking-wide uppercase text-white">QC Gate</h3>
+              <p class="text-[11px] text-zinc-400">Kurasi kualitas visual &amp; konsistensi</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-lumizPurple/15 border border-lumizPurple/30 font-mono text-[10px] font-semibold text-lumizPurpleLight uppercase">
+              LUMIZTUDIO
+            </span>
           </div>
 
           <div id="qc-list" class="space-y-4">
-            <!-- Item 1 -->
-            <div class="pb-3 border-b border-zinc-100 dark:border-zinc-800/80">
-              <div class="flex items-center justify-between font-mono text-xs mb-1">
-                <span class="text-zinc-400">FuntasyRealms • EP-04</span>
-                <span class="text-emerald-500 font-semibold">[APPROVED]</span>
-              </div>
-              <p class="text-sm font-medium">Highcliff Rain & Forge ASMR (28s)</p>
-              <p class="text-xs text-zinc-500 mt-0.5">Omni 1.2 • Konsistensi karakter lolos 100%</p>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="pb-3 border-b border-zinc-100 dark:border-zinc-800/80">
-              <div class="flex items-center justify-between font-mono text-xs mb-1">
-                <span class="text-zinc-400">Kurogane AI • EP-02</span>
-                <span class="text-gold font-semibold">[IN REVIEW]</span>
-              </div>
-              <p class="text-sm font-medium">Neon Ronin: Rainy Alleyway (24s)</p>
-              <p class="text-xs text-zinc-500 mt-0.5">Cek artefak jari pada frame 00:14</p>
-            </div>
-
-            <!-- Item 3 -->
-            <div>
-              <div class="flex items-center justify-between font-mono text-xs mb-1">
-                <span class="text-zinc-400">FuntasyRealms • EP-05</span>
-                <span class="text-crimson font-semibold">[REVISION]</span>
-              </div>
-              <p class="text-sm font-medium">Tavern Lantern Lofi Loop (30s)</p>
-              <p class="text-xs text-zinc-500 mt-0.5">Transisi wajah karakter berubah di detik 19</p>
-            </div>
+            <!-- Injected via JS from content_episodes -->
           </div>
         </div>
 
-        <div class="pt-4 mt-6 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between font-mono text-xs text-zinc-500">
-          <span>PASS RATE: 88.4%</span>
-          <span>AUTO-SYNC: 06:00 WIB</span>
+        <div class="pt-4 mt-6 border-t border-white/[0.08] flex items-center justify-between font-mono text-[11px] text-zinc-400">
+          <span>PIPELINE: OMNI 1.2 / VEO</span>
+          <span class="text-emerald-400">ACTIVE</span>
         </div>
       </div>
+
     </section>
 
-    <!-- CONNECTED ACCOUNTS & CHANNEL TELEMETRY TABLE -->
-    <section class="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-charcoal/30">
-      <div class="p-6 border-b border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <!-- 3. CONNECTED TRAFFIC NODES TABLE -->
+    <section id="channels" class="rounded-2xl bg-lumizSurface border border-white/[0.08] overflow-hidden">
+      <div class="p-6 border-b border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 class="text-base font-bold uppercase tracking-wide">Connected Traffic Nodes</h2>
-          <p class="text-xs text-zinc-500">Daftar akun terpisah lintas platform yang dipantau via Supabase Cron Edge Function</p>
+          <h3 class="font-display font-extrabold text-base tracking-wide uppercase text-white">Connected Traffic Nodes</h3>
+          <p class="text-xs text-zinc-400 mt-0.5">Daftar akun distribusi terpisah yang dipantau oleh ekosistem Luminanze</p>
         </div>
-        <button onclick="refreshData()" class="font-mono text-xs px-3 py-1.5 border border-zinc-300 dark:border-zinc-700 hover:border-crimson transition-colors self-start sm:self-auto">
-          ↻ FORCE SYNC SNAPSHOT
-        </button>
+
+        <div class="flex items-center gap-2.5">
+          <button onclick="triggerLinkSync()" id="btn-edge-sync" class="px-4 py-2 rounded-full bg-lumizPurple/15 hover:bg-lumizPurple/25 border border-lumizPurple/40 font-mono text-xs text-lumizPurpleLight transition-colors flex items-center gap-2">
+            <span>&#9889;</span>
+            <span>FETCH LINK DATA</span>
+          </button>
+          <button onclick="loadFromSupabase(true)" class="px-4 py-2 rounded-full bg-lumizCard hover:bg-zinc-800 border border-white/10 font-mono text-xs text-zinc-200 transition-colors flex items-center gap-2">
+            <span>&#8635;</span>
+            <span>REFRESH DB</span>
+          </button>
+        </div>
       </div>
 
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="border-b border-zinc-200 dark:border-zinc-800 font-mono text-[11px] uppercase tracking-wider text-zinc-500 bg-zinc-50 dark:bg-zinc-900/50">
+            <tr class="border-b border-white/[0.08] bg-white/[0.02] font-mono text-[11px] uppercase tracking-wider text-zinc-400">
               <th class="py-3.5 px-6">Platform</th>
-              <th class="py-3.5 px-6">Channel Handle</th>
+              <th class="py-3.5 px-6">Channel &amp; Link</th>
               <th class="py-3.5 px-6">Studio / IP</th>
               <th class="py-3.5 px-6">Target Region</th>
               <th class="py-3.5 px-6 text-right">Followers</th>
-              <th class="py-3.5 px-6 text-right">30D Views</th>
+              <th class="py-3.5 px-6 text-right">Total Views</th>
               <th class="py-3.5 px-6 text-right">Eng. Rate</th>
               <th class="py-3.5 px-6 text-right">Est. Rev</th>
+              <th class="py-3.5 px-6 text-right">Aksi</th>
             </tr>
           </thead>
-          <tbody id="accounts-tbody" class="divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
-            <!-- Rows injected via JS -->
+          <tbody id="accounts-tbody" class="divide-y divide-white/[0.06] text-sm">
+            <tr>
+              <td colspan="9" class="py-8 px-6 text-center font-mono text-xs text-zinc-500">
+                Memuat data asli dari Supabase...
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -260,117 +272,311 @@
 
   </main>
 
-  <!-- MODAL: ADD NEW TRACKED ACCOUNT -->
-  <div id="track-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-    <div class="w-full max-w-md bg-paper dark:bg-obsidian border border-zinc-300 dark:border-zinc-700 p-6">
-      <div class="flex items-center justify-between pb-4 mb-4 border-b border-zinc-200 dark:border-zinc-800">
-        <h3 class="font-bold uppercase tracking-wide text-sm">Register Traffic Node</h3>
-        <button onclick="toggleModal(false)" class="font-mono text-xs text-zinc-500 hover:text-crimson">[ESC / CLOSE]</button>
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="border-t border-white/[0.06] py-6 px-4 text-center">
+    <p class="font-mono text-[11px] text-zinc-500">
+      LUMI<span class="text-lumizPurpleLight font-bold">Z</span> ANALYTICS ENGINE &bull; LUMINANZE ECOSYSTEM &bull; POWERED BY SUPABASE
+    </p>
+  </footer>
+
+  <!-- =========================================================================
+       MODAL: REGISTER NEW TRAFFIC NODE
+       ========================================================================= -->
+  <div id="track-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md rounded-2xl bg-lumizSurface border border-white/15 p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
+        <div>
+          <h3 class="font-display font-extrabold uppercase tracking-wide text-sm text-white">Register Traffic Node</h3>
+          <p class="text-xs text-zinc-400 mt-0.5">Tambahkan kanal baru ke tabel social_accounts</p>
+        </div>
+        <button onclick="toggleModal(false)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white flex items-center justify-center text-xs transition-colors">
+          &#10005;
+        </button>
       </div>
 
       <form id="add-account-form" class="space-y-4">
         <div>
-          <label class="block font-mono text-xs uppercase text-zinc-500 mb-1">Platform</label>
-          <select id="inp-platform" class="w-full px-3 py-2 bg-transparent border border-zinc-300 dark:border-zinc-700 font-mono text-xs focus:outline-none focus:border-crimson">
-            <option value="youtube" class="dark:bg-obsidian">YouTube Shorts</option>
-            <option value="tiktok" class="dark:bg-obsidian">TikTok</option>
-            <option value="instagram" class="dark:bg-obsidian">Instagram Reels</option>
+          <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Platform</label>
+          <select id="inp-platform" class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white focus:outline-none focus:border-lumizPurpleLight">
+            <option value="youtube">YouTube Shorts</option>
+            <option value="tiktok">TikTok</option>
+            <option value="instagram">Instagram Reels</option>
+            <option value="x">X (Twitter)</option>
           </select>
         </div>
 
         <div>
-          <label class="block font-mono text-xs uppercase text-zinc-500 mb-1">Account Handle</label>
-          <input type="text" id="inp-handle" required placeholder="@FuntasyRealms" class="w-full px-3 py-2 bg-transparent border border-zinc-300 dark:border-zinc-700 font-mono text-xs focus:outline-none focus:border-crimson" />
+          <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Account Handle</label>
+          <input type="text" id="inp-handle" required placeholder="@FuntasyRealmsShorts" class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-lumizPurpleLight" />
         </div>
 
         <div>
-          <label class="block font-mono text-xs uppercase text-zinc-500 mb-1">Profile URL (Untuk Cron Scraper)</label>
-          <input type="url" id="inp-url" required placeholder="https://youtube.com/@FuntasyRealms" class="w-full px-3 py-2 bg-transparent border border-zinc-300 dark:border-zinc-700 font-mono text-xs focus:outline-none focus:border-crimson" />
+          <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Profile URL</label>
+          <input type="url" id="inp-url" required placeholder="https://youtube.com/@FuntasyRealmsShorts" class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-lumizPurpleLight" />
         </div>
 
         <div>
-          <label class="block font-mono text-xs uppercase text-zinc-500 mb-1">Target Audience Tier</label>
-          <input type="text" id="inp-region" value="Global / Tier-1" class="w-full px-3 py-2 bg-transparent border border-zinc-300 dark:border-zinc-700 font-mono text-xs focus:outline-none focus:border-crimson" />
+          <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Target Audience Region</label>
+          <input type="text" id="inp-region" value="Global / Tier-1" class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white focus:outline-none focus:border-lumizPurpleLight" />
         </div>
 
-        <div class="pt-2 flex justify-end gap-2">
-          <button type="button" onclick="toggleModal(false)" class="px-4 py-2 border border-zinc-300 dark:border-zinc-700 font-mono text-xs">CANCEL</button>
-          <button type="submit" class="px-4 py-2 bg-crimson text-white font-mono text-xs font-semibold uppercase">SAVE NODE</button>
+        <div class="pt-3 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="toggleModal(false)" class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-300 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" id="btn-save-node" class="px-5 py-2 rounded-full bg-lumizPurple hover:bg-lumizPurpleLight text-white font-bold text-xs uppercase tracking-wider shadow-purple-glow transition-all">
+            Save Node
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <script>
-    // =========================================================================
-    // 1. KONFIGURASI SUPABASE (ISI DENGAN CREDENTIALS PROJECT BOS ZEN)
-    // =========================================================================
-    const SUPABASE_URL = ''; // Contoh: 'https://xyzcompany.supabase.co'
-    const SUPABASE_ANON_KEY = ''; // Public anon key dari Project Settings > API
+  <!-- =========================================================================
+       MODAL: LOG REAL SNAPSHOT METRICS FOR A LINK
+       ========================================================================= -->
+  <div id="snapshot-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md rounded-2xl bg-lumizSurface border border-white/15 p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
+        <div>
+          <h3 class="font-display font-extrabold uppercase tracking-wide text-sm text-white">Update Metrik Asli</h3>
+          <p id="snap-modal-subtitle" class="text-xs text-zinc-400 mt-0.5 font-mono truncate"></p>
+        </div>
+        <button onclick="toggleSnapshotModal(false)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white flex items-center justify-center text-xs transition-colors">
+          &#10005;
+        </button>
+      </div>
 
-    let supabaseClient = null;
-    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const statusEl = document.getElementById('db-status');
-      statusEl.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>SUPABASE LIVE</span>`;
+      <form id="snapshot-form" class="space-y-4">
+        <input type="hidden" id="snap-account-id" />
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Followers</label>
+            <input type="number" min="0" id="snap-followers" required class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white font-mono focus:outline-none focus:border-lumizPurpleLight" />
+          </div>
+          <div>
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Views 24 Jam</label>
+            <input type="number" min="0" id="snap-views24h" required class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white font-mono focus:outline-none focus:border-lumizPurpleLight" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Total Views</label>
+            <input type="number" min="0" id="snap-totalviews" required class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white font-mono focus:outline-none focus:border-lumizPurpleLight" />
+          </div>
+          <div>
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Eng. Rate (%)</label>
+            <input type="number" min="0" step="0.01" id="snap-er" required class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white font-mono focus:outline-none focus:border-lumizPurpleLight" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Est. Rev (USD)</label>
+            <input type="number" min="0" step="0.01" id="snap-rev" required class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white font-mono focus:outline-none focus:border-lumizPurpleLight" />
+          </div>
+          <div>
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-1.5">Lumiz Pro Clicks</label>
+            <input type="number" min="0" id="snap-clicks" required class="w-full px-3.5 py-2.5 rounded-xl bg-lumizBg border border-white/10 text-sm text-white font-mono focus:outline-none focus:border-lumizPurpleLight" />
+          </div>
+        </div>
+
+        <div class="pt-3 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="toggleSnapshotModal(false)" class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 text-xs font-medium text-zinc-300 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" id="btn-save-snap" class="px-5 py-2 rounded-full bg-lumizPurple hover:bg-lumizPurpleLight text-white font-bold text-xs uppercase tracking-wider shadow-purple-glow transition-all">
+            Simpan Snapshot
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       CUSTOM TOAST NOTIFICATION (NO ALERT/CONFIRM)
+       ========================================================================= -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- =========================================================================
+       APPLICATION LOGIC & SUPABASE INTEGRATION (100% REAL DATA)
+       ========================================================================= -->
+  <script>
+    // -------------------------------------------------------------------------
+    // 1. SUPABASE CONFIGURATION (PUBLISHABLE KEY ONLY — SAFE FOR FRONTEND)
+    // -------------------------------------------------------------------------
+    const SUPABASE_URL = 'https://hnnocerutwpfikwahrgq.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_aMULQyKYbLoHmHZIQlKE7w_HCsOlsNL';
+
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    // -------------------------------------------------------------------------
+    // 2. STATE (100% REAL DATA FROM SUPABASE — NO MOCK/DEMO DATA)
+    // -------------------------------------------------------------------------
+    let currentFilter = 'all';
+    let accountsData = [];
+    let allSnapshots = [];
+    let qcEpisodes = [];
+    let lastDbError = null;
+
+    // -------------------------------------------------------------------------
+    // 3. CUSTOM TOAST HELPER (REPLACEMENT FOR ALERT)
+    // -------------------------------------------------------------------------
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const colors = {
+        success: 'border-emerald-500/40 bg-lumizSurface text-emerald-300',
+        error:   'border-lumizCrimson/50 bg-lumizSurface text-rose-300',
+        info:    'border-lumizPurple/50 bg-lumizSurface text-purple-200'
+      };
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto px-4 py-3 rounded-xl border ${colors[type] || colors.info} shadow-xl font-mono text-xs flex items-center gap-2.5 transition-all duration-300 opacity-0 translate-y-2`;
+      toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-current"></span><span>${message}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', 'translate-y-2');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3800);
     }
 
-    // =========================================================================
-    // 2. DATA STATE (FALLBACK SIMULASI JIKA SUPABASE BELUM DIHUBUNGKAN)
-    // =========================================================================
-    let currentFilter = 'all';
-    let accountsData = [
-      {
-        platform: 'youtube',
-        handle: '@FuntasyRealmsShorts',
-        studio: 'Lumiztudio IP',
-        region: 'US / UK / CA (Tier-1)',
-        followers: 38400,
-        views: 742000,
-        er: 8.4,
-        rev: 385.20
+    // -------------------------------------------------------------------------
+    // 4. CHART.JS SETUP (LUMIZ DARK EDITORIAL STYLE)
+    // -------------------------------------------------------------------------
+    const chartCtx = document.getElementById('velocityChart').getContext('2d');
+    const velocityChart = new Chart(chartCtx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'YouTube Shorts',
+            data: [],
+            borderColor: '#E11D48',
+            backgroundColor: 'rgba(225, 29, 72, 0.08)',
+            borderWidth: 2.5,
+            tension: 0.3,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            fill: true
+          },
+          {
+            label: 'TikTok',
+            data: [],
+            borderColor: '#A855F7',
+            backgroundColor: 'rgba(168, 85, 247, 0.08)',
+            borderWidth: 2.5,
+            tension: 0.3,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            fill: true
+          },
+          {
+            label: 'Instagram Reels',
+            data: [],
+            borderColor: '#F59E0B',
+            backgroundColor: 'rgba(245, 158, 11, 0.06)',
+            borderWidth: 2.5,
+            tension: 0.3,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            fill: true
+          }
+        ]
       },
-      {
-        platform: 'tiktok',
-        handle: '@funtasyrealms.asmr',
-        studio: 'Lumiztudio IP',
-        region: 'Global / Lofi Niche',
-        followers: 29120,
-        views: 518900,
-        er: 11.2,
-        rev: 184.30
-      },
-      {
-        platform: 'instagram',
-        handle: '@funtasyrealms.id',
-        studio: 'Lumiztudio IP',
-        region: 'Indonesia / SEA',
-        followers: 16800,
-        views: 222000,
-        er: 6.9,
-        rev: 73.00
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#101014',
+            titleColor: '#F4F4F5',
+            bodyColor: '#D4D4D8',
+            borderColor: 'rgba(255,255,255,0.12)',
+            borderWidth: 1,
+            padding: 10,
+            titleFont: { family: 'JetBrains Mono', size: 11 },
+            bodyFont: { family: 'JetBrains Mono', size: 11 }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { font: { family: 'JetBrains Mono', size: 11 }, color: '#71717A' }
+          },
+          y: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { font: { family: 'JetBrains Mono', size: 11 }, color: '#71717A' }
+          }
+        }
       }
-    ];
+    });
 
-    // =========================================================================
-    // 3. RENDER TABEL & METRIK KPI
-    // =========================================================================
+    function updateChartFromSnapshots() {
+      const emptyOverlay = document.getElementById('chart-empty');
+
+      if (!allSnapshots || allSnapshots.length === 0) {
+        velocityChart.data.labels = [];
+        velocityChart.data.datasets.forEach(ds => { ds.data = []; });
+        velocityChart.update();
+        emptyOverlay.classList.remove('hidden');
+        return;
+      }
+
+      emptyOverlay.classList.add('hidden');
+      const uniqueDates = [...new Set(allSnapshots.map(s => s.snapshot_date))].sort().slice(-7);
+      velocityChart.data.labels = uniqueDates.map(d => d.slice(5));
+
+      const platformByAcc = {};
+      accountsData.forEach(acc => {
+        platformByAcc[acc.id] = acc.platform;
+      });
+
+      const totals = { youtube: {}, tiktok: {}, instagram: {} };
+      allSnapshots.forEach(snap => {
+        const plat = platformByAcc[snap.social_account_id];
+        if (totals[plat]) {
+          totals[plat][snap.snapshot_date] =
+            (totals[plat][snap.snapshot_date] || 0) + Number(snap.views_24h || 0);
+        }
+      });
+
+      velocityChart.data.datasets[0].data = uniqueDates.map(d => totals.youtube[d] || 0);
+      velocityChart.data.datasets[1].data = uniqueDates.map(d => totals.tiktok[d] || 0);
+      velocityChart.data.datasets[2].data = uniqueDates.map(d => totals.instagram[d] || 0);
+      velocityChart.update();
+    }
+
+    // -------------------------------------------------------------------------
+    // 5. RENDERING HELPERS (KPI, TABLE, QC GATE)
+    // -------------------------------------------------------------------------
     function formatNumber(num) {
-      return new Intl.NumberFormat('en-US').format(num);
+      return new Intl.NumberFormat('en-US').format(Math.round(num || 0));
     }
 
     function getPlatformBadge(platform) {
       const styles = {
-        youtube: 'border-crimson text-crimson',
-        tiktok: 'border-electric text-electric',
-        instagram: 'border-gold text-gold'
+        youtube:   'bg-lumizCrimson/15 text-rose-400 border-lumizCrimson/30',
+        tiktok:    'bg-lumizPurple/15 text-lumizPurpleLight border-lumizPurple/30',
+        instagram: 'bg-lumizGold/15 text-amber-400 border-lumizGold/30',
+        x:         'bg-zinc-800 text-zinc-300 border-zinc-700'
       };
       const labels = {
         youtube: 'YT SHORTS',
         tiktok: 'TIKTOK',
-        instagram: 'IG REELS'
+        instagram: 'IG REELS',
+        x: 'X / TWITTER'
       };
-      return `<span class="font-mono text-[11px] px-2 py-0.5 border ${styles[platform] || 'border-zinc-500'}">${labels[platform] || platform.toUpperCase()}</span>`;
+      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full border font-mono text-[10px] font-semibold ${styles[platform] || styles.x}">${labels[platform] || platform.toUpperCase()}</span>`;
     }
 
     function renderDashboard() {
@@ -378,122 +584,209 @@
         ? accountsData
         : accountsData.filter(item => item.platform === currentFilter);
 
-      // Hitung ulang KPI sesuai filter aktif
-      const totalViews = filtered.reduce((acc, cur) => acc + cur.views, 0);
-      const totalFollowers = filtered.reduce((acc, cur) => acc + cur.followers, 0);
-      const totalRev = filtered.reduce((acc, cur) => acc + cur.rev, 0);
-      const estUnlocks = Math.round(totalViews * 0.0013); // Asumsi CTR konversi ke Lumiz Pro 0.13%
+      const totalViews = filtered.reduce((acc, cur) => acc + Number(cur.views || 0), 0);
+      const totalFollowers = filtered.reduce((acc, cur) => acc + Number(cur.followers || 0), 0);
+      const totalRev = filtered.reduce((acc, cur) => acc + Number(cur.rev || 0), 0);
+      const totalClicks = filtered.reduce((acc, cur) => acc + Number(cur.clicks || 0), 0);
 
       document.getElementById('kpi-views').textContent = formatNumber(totalViews);
       document.getElementById('kpi-followers').textContent = formatNumber(totalFollowers);
       document.getElementById('kpi-adsense').textContent = `$${totalRev.toFixed(2)}`;
-      document.getElementById('kpi-funnel').innerHTML = `${formatNumber(estUnlocks)} <span class="text-sm font-normal text-zinc-500">unlocks</span>`;
+      document.getElementById('kpi-funnel').innerHTML = `${formatNumber(totalClicks)} <span class="text-sm font-normal text-zinc-500">clicks</span>`;
 
-      // Render baris tabel
       const tbody = document.getElementById('accounts-tbody');
+      if (lastDbError) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" class="py-8 px-6 text-center font-mono text-xs text-rose-400">
+              Gagal membaca Supabase: ${lastDbError}. Pastikan tabel sudah dibuat dan RLS SELECT policy diizinkan.
+            </td>
+          </tr>`;
+        return;
+      }
+
+      if (!filtered.length) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" class="py-8 px-6 text-center font-mono text-xs text-zinc-500">
+              Belum ada link kanal terdaftar untuk filter ini. Klik <span class="text-lumizPurpleLight font-semibold">+ TRACK</span> untuk menambahkan link profil.
+            </td>
+          </tr>`;
+        return;
+      }
+
       tbody.innerHTML = filtered.map(acc => `
-        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors">
+        <tr class="hover:bg-white/[0.02] transition-colors">
           <td class="py-4 px-6">${getPlatformBadge(acc.platform)}</td>
-          <td class="py-4 px-6 font-mono font-medium">${acc.handle}</td>
-          <td class="py-4 px-6 text-zinc-500">${acc.studio}</td>
-          <td class="py-4 px-6 font-mono text-xs text-zinc-500">${acc.region}</td>
-          <td class="py-4 px-6 text-right font-mono">${formatNumber(acc.followers)}</td>
-          <td class="py-4 px-6 text-right font-mono font-semibold">${formatNumber(acc.views)}</td>
-          <td class="py-4 px-6 text-right font-mono text-emerald-500">${acc.er}%</td>
-          <td class="py-4 px-6 text-right font-mono">$${acc.rev.toFixed(2)}</td>
+          <td class="py-4 px-6">
+            <div class="font-mono font-medium text-white">${acc.handle}</div>
+            <a href="${acc.profile_url}" target="_blank" rel="noopener noreferrer" class="font-mono text-[11px] text-lumizPurpleLight hover:underline truncate block max-w-[220px]">
+              ${acc.profile_url}
+            </a>
+          </td>
+          <td class="py-4 px-6 text-zinc-400">${acc.studio}</td>
+          <td class="py-4 px-6 font-mono text-xs text-zinc-400">${acc.region}</td>
+          <td class="py-4 px-6 text-right font-mono text-zinc-200">${formatNumber(acc.followers)}</td>
+          <td class="py-4 px-6 text-right font-mono font-semibold text-white">${formatNumber(acc.views)}</td>
+          <td class="py-4 px-6 text-right font-mono text-emerald-400">${Number(acc.er || 0).toFixed(1)}%</td>
+          <td class="py-4 px-6 text-right font-mono text-zinc-200">$${Number(acc.rev || 0).toFixed(2)}</td>
+          <td class="py-4 px-6 text-right">
+            <button onclick="openSnapshotModal('${acc.id}')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-lumizPurple/20 border border-white/10 hover:border-lumizPurple/40 font-mono text-[11px] text-zinc-200 transition-colors">
+              Update
+            </button>
+          </td>
         </tr>
       `).join('');
     }
 
-    function setPlatformFilter(platform) {
-      currentFilter = platform;
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        if (btn.dataset.filter === platform) {
-          btn.classList.add('bg-zinc-900', 'text-white', 'dark:bg-white', 'dark:text-obsidian', 'font-semibold');
-        } else {
-          btn.classList.remove('bg-zinc-900', 'text-white', 'dark:bg-white', 'dark:text-obsidian', 'font-semibold');
-        }
-      });
-      renderDashboard();
-    }
+    function renderQcGate() {
+      const container = document.getElementById('qc-list');
+      const statusMap = {
+        approved:        { label: 'APPROVED', cls: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+        pending:         { label: 'IN REVIEW', cls: 'text-amber-400 bg-amber-500/10 border-amber-500/20' },
+        revision_needed: { label: 'REVISION', cls: 'text-rose-400 bg-rose-500/10 border-rose-500/20' }
+      };
 
-    // =========================================================================
-    // 4. FETCH DATA DARI SUPABASE (JIKA SUDAH TERKONEKSI)
-    // =========================================================================
-    async function loadFromSupabase() {
-      if (!supabaseClient) return;
-
-      const { data, error } = await supabaseClient
-        .from('social_accounts')
-        .select(`
-          platform,
-          account_handle,
-          audience_region,
-          creators ( studio_name ),
-          analytics_snapshots ( followers_count, total_views, engagement_rate, est_ad_revenue_usd )
-        `)
-        .eq('is_active', true);
-
-      if (error) {
-        console.error('Supabase fetch error:', error.message);
+      if (!qcEpisodes || qcEpisodes.length === 0) {
+        container.innerHTML = `
+          <div class="p-4 rounded-xl bg-lumizBg/70 border border-white/[0.06] text-center">
+            <p class="font-mono text-xs text-zinc-400">Belum ada episode di tabel content_episodes.</p>
+          </div>
+        `;
         return;
       }
 
-      if (data && data.length > 0) {
-        accountsData = data.map(row => {
-          const latest = row.analytics_snapshots?.[0] || {};
-          return {
-            platform: row.platform,
-            handle: row.account_handle,
-            studio: row.creators?.studio_name || 'Luminanze Creator',
-            region: row.audience_region,
-            followers: Number(latest.followers_count || 0),
-            views: Number(latest.total_views || 0),
-            er: Number(latest.engagement_rate || 0),
-            rev: Number(latest.est_ad_revenue_usd || 0)
-          };
-        });
+      container.innerHTML = qcEpisodes.slice(0, 4).map(ep => {
+        const st = statusMap[ep.qc_status] || statusMap.pending;
+        return `
+          <div class="p-3.5 rounded-xl bg-lumizBg/70 border border-white/[0.06] space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-mono text-[11px] text-zinc-400 truncate">${ep.series_title} &bull; ${ep.episode_code}</span>
+              <span class="px-2 py-0.5 rounded-full border font-mono text-[10px] font-semibold ${st.cls}">${st.label}</span>
+            </div>
+            <p class="text-sm font-medium text-white leading-snug">${ep.title}</p>
+            <p class="text-xs text-zinc-500">${ep.qc_notes || 'Menunggu catatan kurasi'}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setPlatformFilter(platform) {
+      currentFilter = platform;
+
+      document.querySelectorAll('.filter-pill').forEach(btn => {
+        const isActive = btn.dataset.filter === platform;
+        if (isActive) {
+          btn.className = 'filter-pill px-5 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all bg-lumizPurple text-white shadow-purple-glow border border-lumizPurpleLight';
+        } else {
+          btn.className = 'filter-pill px-5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all bg-lumizSurface text-zinc-300 border border-white/10 hover:border-white/25 hover:text-white';
+        }
+      });
+
+      renderDashboard();
+    }
+
+    // -------------------------------------------------------------------------
+    // 6. SUPABASE DATA SYNC (100% REAL DATA ONLY)
+    // -------------------------------------------------------------------------
+    async function loadFromSupabase(isManual = false) {
+      lastDbError = null;
+      try {
+        const [accRes, snapRes, qcRes] = await Promise.all([
+          supabaseClient
+            .from('social_accounts')
+            .select('id, platform, account_handle, profile_url, audience_region, last_synced_at, creators ( studio_name )')
+            .eq('is_active', true)
+            .order('created_at', { ascending: false }),
+          supabaseClient
+            .from('analytics_snapshots')
+            .select('social_account_id, snapshot_date, followers_count, views_24h, total_views, engagement_rate, est_ad_revenue_usd, lumiz_pro_clicks')
+            .order('snapshot_date', { ascending: false }),
+          supabaseClient
+            .from('content_episodes')
+            .select('series_title, episode_code, title, qc_status, qc_notes')
+            .order('published_at', { ascending: false })
+            .limit(4)
+        ]);
+
+        if (accRes.error) {
+          lastDbError = accRes.error.message;
+          accountsData = [];
+          allSnapshots = [];
+          qcEpisodes = [];
+          showToast(`Supabase Error: ${accRes.error.message}`, 'error');
+        } else {
+          allSnapshots = snapRes.error ? [] : (snapRes.data || []);
+          qcEpisodes = qcRes.error ? [] : (qcRes.data || []);
+
+          accountsData = (accRes.data || []).map(row => {
+            const latest = allSnapshots.find(s => s.social_account_id === row.id) || {};
+            const totalClicksForAcc = allSnapshots
+              .filter(s => s.social_account_id === row.id)
+              .reduce((sum, s) => sum + Number(s.lumiz_pro_clicks || 0), 0);
+
+            return {
+              id: row.id,
+              platform: row.platform,
+              handle: row.account_handle,
+              profile_url: row.profile_url,
+              studio: row.creators?.studio_name || 'Lumiztudio IP',
+              region: row.audience_region,
+              followers: Number(latest.followers_count || 0),
+              views24h: Number(latest.views_24h || 0),
+              views: Number(latest.total_views || 0),
+              er: Number(latest.engagement_rate || 0),
+              rev: Number(latest.est_ad_revenue_usd || 0),
+              clicks: totalClicksForAcc
+            };
+          });
+
+          if (isManual) {
+            showToast(`Sinkronisasi selesai (${accountsData.length} kanal aktif).`, 'success');
+          }
+        }
+
         renderDashboard();
+        renderQcGate();
+        updateChartFromSnapshots();
+      } catch (err) {
+        console.error('Telemetry sync error:', err);
+        lastDbError = err.message || 'Network error';
+        accountsData = [];
+        allSnapshots = [];
+        qcEpisodes = [];
+        renderDashboard();
+        renderQcGate();
+        updateChartFromSnapshots();
+        showToast('Gagal menghubungi server Supabase.', 'error');
       }
     }
 
-    // Tambah Akun Baru
-    document.getElementById('add-account-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const platform = document.getElementById('inp-platform').value;
-      const handle = document.getElementById('inp-handle').value.trim();
-      const profile_url = document.getElementById('inp-url').value.trim();
-      const region = document.getElementById('inp-region').value.trim();
+    // Trigger Edge Function untuk menarik data asli dari URL profil lintas platform
+    async function triggerLinkSync() {
+      const btn = document.getElementById('btn-edge-sync');
+      btn.disabled = true;
+      btn.innerHTML = `<span>&#8987;</span><span>FETCHING...</span>`;
 
-      if (supabaseClient) {
-        // Insert ke Supabase (menggunakan default creator ID pertama dari seed)
-        await supabaseClient.from('social_accounts').insert([{
-          creator_id: '11111111-1111-1111-1111-111111111111',
-          platform,
-          account_handle: handle,
-          profile_url,
-          audience_region: region
-        }]);
-        await loadFromSupabase();
-      } else {
-        // Tambah ke state lokal untuk simulasi
-        accountsData.push({
-          platform,
-          handle,
-          studio: 'New Creator Node',
-          region,
-          followers: 1200,
-          views: 18500,
-          er: 7.5,
-          rev: 12.40
-        });
-        renderDashboard();
+      try {
+        const { data, error } = await supabaseClient.functions.invoke('sync-social-metrics');
+        if (error) {
+          showToast('Edge Function sync-social-metrics belum di-deploy di Supabase. Gunakan tombol Update di tabel atau deploy Edge Function.', 'info');
+        } else {
+          showToast(data?.message || 'Data link berhasil ditarik dari platform!', 'success');
+          await loadFromSupabase(false);
+        }
+      } catch (err) {
+        showToast('Gagal memanggil Edge Function sync-social-metrics.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>&#9889;</span><span>FETCH LINK DATA</span>`;
       }
+    }
 
-      e.target.reset();
-      toggleModal(false);
-    });
-
+    // -------------------------------------------------------------------------
+    // 7. MODALS & FORM SUBMISSIONS (DIRECT TO SUPABASE)
+    // -------------------------------------------------------------------------
     function toggleModal(show) {
       const modal = document.getElementById('track-modal');
       if (show) {
@@ -505,83 +798,130 @@
       }
     }
 
-    function refreshData() {
-      if (supabaseClient) {
-        loadFromSupabase();
+    function toggleSnapshotModal(show) {
+      const modal = document.getElementById('snapshot-modal');
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
       } else {
-        // Simulasi pertambahan views live
-        accountsData = accountsData.map(a => ({
-          ...a,
-          views: a.views + Math.floor(Math.random() * 1500)
-        }));
-        renderDashboard();
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
       }
     }
 
-    // =========================================================================
-    // 5. CHART.JS EDITORIAL LINE GRAPH & THEME SWITCHER
-    // =========================================================================
-    const ctx = document.getElementById('velocityChart').getContext('2d');
-    const velocityChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-        datasets: [
-          {
-            label: 'YouTube Shorts',
-            data: [82000, 95000, 110000, 104000, 128000, 145000, 162000],
-            borderColor: '#E11D48', // Crimson
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            tension: 0.2,
-            pointRadius: 3
-          },
-          {
-            label: 'TikTok',
-            data: [64000, 71000, 69000, 88000, 94000, 112000, 121000],
-            borderColor: '#7C3AED', // Electric Purple
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            tension: 0.2,
-            pointRadius: 3
-          },
-          {
-            label: 'Instagram Reels',
-            data: [28000, 31000, 35000, 33000, 41000, 46000, 52000],
-            borderColor: '#D97706', // Gold
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            tension: 0.2,
-            pointRadius: 3
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          x: {
-            grid: { color: 'rgba(113, 113, 122, 0.15)' },
-            ticks: { font: { family: 'JetBrains Mono', size: 11 }, color: '#71717a' }
-          },
-          y: {
-            grid: { color: 'rgba(113, 113, 122, 0.15)' },
-            ticks: { font: { family: 'JetBrains Mono', size: 11 }, color: '#71717a' }
-          }
+    function openSnapshotModal(accountId) {
+      const acc = accountsData.find(a => a.id === accountId);
+      if (!acc) return;
+
+      document.getElementById('snap-account-id').value = acc.id;
+      document.getElementById('snap-modal-subtitle').textContent = `${acc.handle} — ${acc.profile_url}`;
+      document.getElementById('snap-followers').value = acc.followers || 0;
+      document.getElementById('snap-views24h').value = acc.views24h || 0;
+      document.getElementById('snap-totalviews').value = acc.views || 0;
+      document.getElementById('snap-er').value = acc.er || 0;
+      document.getElementById('snap-rev').value = acc.rev || 0;
+      document.getElementById('snap-clicks').value = acc.clicks || 0;
+      toggleSnapshotModal(true);
+    }
+
+    document.getElementById('add-account-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-save-node');
+      btn.disabled = true;
+      btn.textContent = 'SAVING...';
+
+      const platform = document.getElementById('inp-platform').value;
+      const handle = document.getElementById('inp-handle').value.trim();
+      const profile_url = document.getElementById('inp-url').value.trim();
+      const region = document.getElementById('inp-region').value.trim() || 'Global / Tier-1';
+
+      try {
+        const { error } = await supabaseClient.from('social_accounts').insert([{
+          creator_id: '11111111-1111-1111-1111-111111111111',
+          platform,
+          account_handle: handle,
+          profile_url,
+          audience_region: region
+        }]);
+
+        if (error) {
+          showToast(`Gagal menyimpan ke Supabase: ${error.message}`, 'error');
+        } else {
+          showToast(`Link ${handle} berhasil disimpan ke Supabase!`, 'success');
+          e.target.reset();
+          toggleModal(false);
+          await loadFromSupabase(false);
         }
+      } catch (err) {
+        console.error('Insert node error:', err);
+        showToast('Terjadi kesalahan jaringan saat menyimpan kanal.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'SAVE NODE';
       }
     });
 
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
+    document.getElementById('snapshot-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-save-snap');
+      btn.disabled = true;
+      btn.textContent = 'SAVING...';
+
+      const social_account_id = document.getElementById('snap-account-id').value;
+      const today = new Date().toISOString().split('T')[0];
+
+      const payload = {
+        social_account_id,
+        snapshot_date: today,
+        followers_count: Number(document.getElementById('snap-followers').value || 0),
+        views_24h: Number(document.getElementById('snap-views24h').value || 0),
+        total_views: Number(document.getElementById('snap-totalviews').value || 0),
+        engagement_rate: Number(document.getElementById('snap-er').value || 0),
+        est_ad_revenue_usd: Number(document.getElementById('snap-rev').value || 0),
+        lumiz_pro_clicks: Number(document.getElementById('snap-clicks').value || 0)
+      };
+
+      try {
+        const { error } = await supabaseClient
+          .from('analytics_snapshots')
+          .upsert([payload], { onConflict: 'social_account_id,snapshot_date' });
+
+        if (error) {
+          showToast(`Gagal menyimpan snapshot: ${error.message}`, 'error');
+        } else {
+          showToast('Snapshot metrik asli hari ini berhasil disimpan!', 'success');
+          toggleSnapshotModal(false);
+          await loadFromSupabase(false);
+        }
+      } catch (err) {
+        console.error('Upsert snapshot error:', err);
+        showToast('Terjadi kesalahan saat menyimpan snapshot.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'SIMPAN SNAPSHOT';
+      }
     });
 
-    // Inisialisasi awal
-    renderDashboard();
-    loadFromSupabase();
+    // Tutup modal saat klik backdrop atau tekan ESC
+    document.getElementById('track-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'track-modal') toggleModal(false);
+    });
+    document.getElementById('snapshot-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'snapshot-modal') toggleSnapshotModal(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        toggleModal(false);
+        toggleSnapshotModal(false);
+      }
+    });
+
+    // -------------------------------------------------------------------------
+    // 8. INITIALIZE ON LOAD
+    // -------------------------------------------------------------------------
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFromSupabase(false);
+    });
   </script>
 </body>
 </html>
